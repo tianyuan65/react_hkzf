@@ -1,7 +1,6 @@
 import React, { Component } from 'react'
 // 导入关于轮播图的组件
 import { Carousel,Flex } from 'antd-mobile-v2';
-import { Link } from 'react-router-dom';
 // 导入axios
 import axios from 'axios'
 // 导入导航菜单图片
@@ -56,6 +55,7 @@ export default class Index extends Component {
   state = {
     // 初始化轮播图状态数据
     swipers:[],
+    // 添加一个状态，表示轮播图数据是否加载完成，等数据加载完成时，把状态值改为true(```isSwiperLoaded:true```)
     isSwiperLoaded:false
   }
   // 获取轮播图数据的方法
@@ -63,16 +63,18 @@ export default class Index extends Component {
     const res=await axios.get('http://localhost:8080/home/swiper')
     this.setState({
         swipers:res.data.body,
+        // 只有数据加载完成，状态值为true，才会渲染轮播图
         isSwiperLoaded:true
     })
   }
   componentDidMount() {
+    // 调用获取轮播图数据的函数，使之能正常渲染轮播图
     this.getSwipers()
   }
   //渲染轮播图结构   
   renderSwipers(){
-    return this.state.data.map(item => (
-        <Link
+    return this.state.swipers.map(item => (
+        <a
           key={item.id}
           href="http://itcast.cn"
           style={{ display: 'inline-block', width: '100%', height:212}}
@@ -82,30 +84,32 @@ export default class Index extends Component {
             alt=""
             style={{ width: '100%', verticalAlign: 'top' }}
           />
-        </Link>
+        </a>
       ))
   }
   // 渲染导航菜单
   renderNavs(){
     return navs.map(item=><Flex.Item 
-        key={item.id} 
-        onClick={()=>this.props.history.push(item.path)}>
-        <img src={item.img} alt=""/>
-        <h2>{item.title}</h2>
+          key={item.id} 
+          onClick={()=>this.props.history.push(item.path)}>
+          <img src={item.img} alt=""/>
+          <h2>{item.title}</h2>
         </Flex.Item>)
   }
   render() {
     return (
       <div className='index'>
         <div className="swiper">
-            {this.state.isSwiperLoaded?(
+            {
+              // 判断isSwiperLoaded的值是否为true，状态值为true，才渲染轮播图
+              this.state.isSwiperLoaded?(
                 <Carousel
                     autoplay  // 轮播图是否自动播放 
                     infinite  // 是否循环播放
                     autoplayInterval={5000}  // 自动切换的时间间隔
                     >
                     {this.renderSwipers()}
-                </Carousel>):('')
+                </Carousel>):('')  //若没有加载完成，就渲染空的内容
             }
         </div>
         

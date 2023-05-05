@@ -1,28 +1,28 @@
 import React from 'react'
 // import {Button} from 'antd-mobile-v2'
-import {Routes,Route,Navigate} from 'react-router-dom'
+import {Switch,Route,Redirect} from 'react-router-dom'
 // 导入首页和选择城市界面
 import Home from './pages/Home'
-import Index from './pages/Index'
+// import Index from './pages/Index'
 import CityList from './pages/CityList'
-import News from './pages/News'
+// import News from './pages/News'
 import Profile from './pages/Profile'
 // import routes from './routes'
 
 export default function App() {
   return (
     <div className="App">
-      <Routes>
+      <Switch>
         {/* 配置路由 */}
-        <Route path="/home" element={<Home />}>
-          <Route path="index" element = {<Index/>}/>
-          <Route path="news" element = {<News/>}/>
+        <Route path="/home" component={Home }>
+          {/* <Route path="index" component = {Index}/> */}
+          {/* <Route path="news" component = {News}/> */}
         </Route>
-        <Route path="/list" element={<CityList/>}/>
-        <Route path="/profile" element={<Profile/>}/>
+        <Route path="/list" component={CityList}/>
+        <Route path="/profile" component={Profile}/>
         {/* 默认路由匹配时，跳转到/home，实现路由重定向到首页 */}
-        <Route path='/' element={<Navigate to="/home"/>}/>
-      </Routes>
+        <Redirect to="/home" component={Home}/>
+      </Switch>
 
       
     </div>

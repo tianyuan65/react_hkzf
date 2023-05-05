@@ -1,6 +1,6 @@
 import React,{Component} from 'react'
 import { TabBar } from 'antd-mobile-v2'
-import {Routes,Route,withRouter} from 'react-router-dom'
+import {Switch,Route} from 'react-router-dom'
 // import { DemoBlock } from 'demos'
 import Index from '../Index'
 import CityList from '../CityList'
@@ -45,18 +45,19 @@ const tabs=[
  *  2. 在钩子函数中判断路由地址是否切换(因为路由的信息是通过props传递给组件的，所以，通过比较更新前后的两个props)
  *  3. 在路由地址切换时，让菜单高亮
  */
-class Home extends Component{
+export default class Home extends Component{
   state = {
       // 默认选中的TabBar菜单项
-      // selectedTab:this.props.location.pathname
+      selectedTab:this.props.location.pathname
   }
 
   componentDidUpdate(prevProps){
     console.log('上一次的路由信息');
     console.log(this.props.location);
-    // if(prevProps.location.pathname !== this.props.location.pathname){
-    //   // 此时就说明路由发生切换了
-    // }
+    if(prevProps.location.pathname !== this.props.location.pathname){
+      // 判断成立就说明路由发生切换了
+      this.setState({selectedTab:this.props.location.pathname})
+    }
   }
 
   // 渲染TabBar.Item
@@ -85,16 +86,13 @@ class Home extends Component{
             {this.renderTabBarItem()}
           </TabBar>
         
-        <Routes>
-          <Route exact path='/home' element={<Index/>}/>
-          <Route path='/home/list' element={<CityList/>}/>
-          <Route path='/home/news' element={<News/>}/>
-          <Route path='/home/profile' element={<Profile/>}/>
-        </Routes>
+        <Switch>
+          <Route exact path='/home' component={Index}/>
+          <Route path='/home/list' component={CityList}/>
+          <Route path='/home/news' component={News}/>
+          <Route path='/home/profile' component={Profile}/>
+        </Switch>
       </div>
     )
   }
-  
 }
-
-export default withRouter(Home)
