@@ -36,26 +36,17 @@ const tabs=[
   },
 ]
 
-/*
- * 问题：点击首页导航菜单，导航到找房列表页面时，找房菜单没有高亮
- * 原因：原来我们实现该功能的时候，只考虑了点击以及第一次加载Home组件的情况。但是，没有考虑不重新加载Home组件时的路由切换，因为这种情况下，目前写的代码没有覆盖到
- * 解决方法：
- *  思路：在路由切换时，也执行菜单高亮的逻辑代码
- *  1. 添加componentDiiUpdate钩子
- *  2. 在钩子函数中判断路由地址是否切换(因为路由的信息是通过props传递给组件的，所以，通过比较更新前后的两个props)
- *  3. 在路由地址切换时，让菜单高亮
- */
 export default class Home extends Component{
   state = {
-      // 默认选中的TabBar菜单项
+      // 设置状态，表示默认选中的TabBar菜单项
       selectedTab:this.props.location.pathname
   }
 
+  // 在此更新状态，但更新状态的操作必须放在一个逻辑判断中，判断路由地址是否发生了变化
+    // 钩子中传递prevProps作为参数，来获取最近的前一个props数据，也就是上一个路由信息
   componentDidUpdate(prevProps){
-    console.log('上一次的路由信息');
-    console.log(this.props.location);
     if(prevProps.location.pathname !== this.props.location.pathname){
-      // 判断成立就说明路由发生切换了
+      // 判断成立就说明路由发生切换了，就更新状态，让当前切换到的路由地址对应的TabBar.Item高亮
       this.setState({selectedTab:this.props.location.pathname})
     }
   }
@@ -68,6 +59,8 @@ export default class Home extends Component{
           title={item.title}
           path={item.path}
           icon={<i className={`iconfont ${item.icon}`} />}
+          selectedIcon={<i className={`iconfont ${item.icon}`} />}
+          selected={this.state.selectedTab === item.path}
           onPress={()=>{
             this.setState({
               selectedTab:item.path
