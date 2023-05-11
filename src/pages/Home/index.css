@@ -1,3 +1,6 @@
+.home{
+  padding-bottom: 50px;
+}
 .app {
     height: 100vh;
     display: flex !important;
@@ -22,11 +25,22 @@
   }
 .home.iconfont{
     font-size: 20px;
+    padding:0 17.875px 0 17.875px;
 }
 .am-tab-bar-bar{
     position: fixed;
     bottom:0;
     width:100%;
+    display: flex;
 }
+.am-tab-bar-bar > .am-tab-bar-tab{
+  padding:0 9% 0 9%;
+  
+}
+.am-tab-bar-bar > .am-tab-bar-tab > .am-tab-bar-tab-icon{
+  padding:0 9% 0 9%;
+}
+    
+    
 
 

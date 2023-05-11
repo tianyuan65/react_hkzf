@@ -75,16 +75,15 @@ export default class Home extends Component{
     console.log(this.props);
     return (
       <div className='home'>
-          <TabBar>
-            {this.renderTabBarItem()}
-          </TabBar>
-        
         <Switch>
           <Route exact path='/home' component={Index}/>
           <Route path='/home/list' component={CityList}/>
           <Route path='/home/news' component={News}/>
           <Route path='/home/profile' component={Profile}/>
         </Switch>
+        <TabBar>
+            {this.renderTabBarItem()}
+          </TabBar>
       </div>
     )
   }

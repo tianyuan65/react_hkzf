@@ -8,6 +8,7 @@ import CityList from './pages/CityList'
 // import News from './pages/News'
 import Profile from './pages/Profile'
 // import routes from './routes'
+import Map from './pages/Map'
 
 export default function App() {
   return (
@@ -20,11 +21,11 @@ export default function App() {
         </Route>
         <Route path="/list" component={CityList}/>
         <Route path="/profile" component={Profile}/>
+        <Route path="/map" component={Map}/>
         {/* 默认路由匹配时，跳转到/home，实现路由重定向到首页 */}
         <Redirect to="/home" component={Home}/>
       </Switch>
 
-      
     </div>
   );
 }
