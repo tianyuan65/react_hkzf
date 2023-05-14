@@ -54,6 +54,4 @@ export const getCurrentCity=()=>{
     return new Promise(resolve=>{
         resolve(localCity)
     })
-
-
 }

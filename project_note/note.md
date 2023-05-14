@@ -224,7 +224,7 @@
         * 产生性能问题的原因：大量DOM节点的重绘和重排
         * 其他原因：设备老旧
         * 其他问题：移动端设备耗电快，影响移动设备电池寿命
-        * 优化方案：1. 懒渲染(懒加载？)；2. 可视区域渲染
+        * 优化方案：1. 懒渲染(懒加载)；2. 可视区域渲染
     * 4.4.2 懒渲染说明(就是懒加载)
         * 常见的长列表优化方案，常见于移动端
         * 原理：每次只渲染一部分(比如先渲染10条数据)，等渲染的数据即将滚动完时，再渲染下面部分
@@ -238,3 +238,47 @@
     * 4.5.1 概述
         * 1. 在项目中的应用：实现城市选择列表页面的渲染
         * 2. react-virtualized是React组件，用来高效渲染大型列表和表格数据
+        * 3. GitHub地址：https://github.com/bvaughn/react-virtualized
+    * 4.5.2 基本使用
+        * 1. 安装：npm i react -virtualized --legacy-peer-deps
+        * 2. 在项目入口文件index.js中导入样式文件(只导入一次即可)
+        * 3. 打开文档，点击List组件，进入List的文档中
+        * 4. 翻到文档最底部，将示例代码拷贝到项目中
+        * 5. 分析示例代码
+* 4.6 渲染城市列表
+    * 4.6.1 让List组件占满屏幕
+        * 1. 打开AutoSizer高阶组件的文档
+        * 2. 导入AutoSizer组件
+        * 3. 通过render-props模式，获取到AutoSizer组件暴露的width和height属性
+        * 4. 设置List组件的width和height属性
+        * 5. 设置城市选择页面根元素高度为100%，让List组件占满整个页面
+        * 6. 调整样式，让页面不要出现全局滚动条，避免顶部导航栏滚动。在整个页面的顶部设置padding-top为45px，空出位置，再在顶部导航部分设置margin-top为-45px，占用空出来的位置。就可以把顶部导航固定在顶部，不会跟着下面每一行选项的滚动而跟着滚动甚至消失
+    * 4.6.2 使用List组件渲染城市列表
+        * 1. 将获取到的城市数据(cityList&cityIndex)添加为组件的状态数据
+        * 2. 修改List组件的rowCount为cityIndex数组的长度
+        * 3. 将rowRenderer函数添加到组件中，以便在函数中获取到状态数据cityList和cityIndex
+        * 4. 修改List组件的rowRenderer为组件中的rowRenderer方法
+        * 5. 修改rowRenderer方法中渲染的每行的结构和样式
+        * 6. 修改List组件的rowHeight为函数，动态计算每一行的高度(因为每一行高度都不相同)
+* 4.7 城市索引列表
+    * 4.7.1 渲染城市索引列表
+        * 1. 封装renderCityIndex方法，用来渲染页面右侧的城市索引列表
+        * 2. 在方法中，获取索引数组cityIndex，并对其进行遍历，渲染索引列表
+        * 3. 将索引后退替换为热
+        * 4. 在state中添加状态activeIndex，来指定当前高亮的索引
+        * 5. 在遍历cityIndex是，添加当前字母索引是否符合高亮的条件
+    * 4.7.2 滚动城市列表让对应索引高亮
+        * 1. 给List组件添加onRowRendered配置项，用于获取当前列表渲染的行信息
+        * 2. 通过参数startIndex获取到，起始行索引(也就是城市列表可视区最顶部一行的索引号)
+        * 3. 判断startIndex和activeIndex是否相同(判断的目的是为了提升性能，避免不必要的state更新)
+        * 4. 当startIndex和activeIndex不同时，更新状态activeIndex为startIndex的值
+    * 4.7.3 点击索引置顶该索引城市
+        * 1. 给索引列表项绑定点击事件
+        * 2. 在点击事件中，通过index获取到当前项索引号
+        * 3. 调用List组件中的scrollToRow方法，让List组件滚动到指定行
+            * 3.1 在constructor中，调用React.createRef()创建ref对象
+            * 3.2 将创建好的ref对象，添加为List组件的ref属性
+            * 3.3 通过ref的current属性，获取到组件实例，再调用组件的scrollToRow方法
+        * 4. 设置List组件的scrollToAlignment配置项值为start，保证被点击行出现在页面顶部
+        * 5. 对于点击索引无法正确定位的问题，调用List组件的measureAllRows方法，提前计算高度来解决。什么时候调用该方法？组件刚刚挂载的时候，也就是在componentDidMount钩子中调用
+* 4.8 切换城市

@@ -16,6 +16,7 @@
     "react-dom": "^18.2.0",
     "react-router-dom": "^5.3.4",
     "react-scripts": "5.0.1",
+    "react-virtualized": "^9.22.5",
     "sass": "^1.62.1",
     "web-vitals": "^2.1.4"
   },

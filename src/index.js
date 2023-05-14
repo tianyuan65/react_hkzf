@@ -9,6 +9,8 @@ import 'antd-mobile'
 import './index.css';
 // 导入字体图标库的样式文件
 import './assets/fonts/iconfont.css'
+// 导入react-virtualized组件的样式
+import 'react-virtualized/styles.css'
 
 ReactDOM.render(
     <BrowserRouter>
