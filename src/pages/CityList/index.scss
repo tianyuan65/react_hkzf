@@ -1,19 +1,13 @@
 .citylist{
     height:100%;
     padding-top: 45px;
+
+    // 顶部导航栏
     .navbar{
         margin-top: -45px;
-        background-color: #f6f5f6;
-        color:#333;
         display: flex;
-        .am-navbar-title{
-            color:#333;
-            display: flex;
-            font-size: 30px;
-            text-align: center;
-        }
     }
-
+    // 城市列表
     .city{
         .title{
             font-size: 14px;
@@ -36,6 +30,7 @@
         }
     }
 
+    // 右侧索引
     .city-index{
         position:absolute;
         display: flex;
@@ -60,4 +55,12 @@
             line-height: 15px;
         }
     }
-} 
+}
+
+// 测试样式
+// .test{
+//     color:aqua;
+//     font-size: 20px;
+// }
+
+

@@ -4,6 +4,8 @@ import './index.css'
 // import {Map, Marker, NavigationControl, InfoWindow} from 'react-bmapgl'
 // 引入amap-jsapi-loader
 import AMapLoader from '@amap/amap-jsapi-loader';
+// 导入NavHeader组件
+import NavHeader from '../../components/NavHeader';
 
 export default class Map extends Component {
     constructor(){
@@ -35,6 +37,16 @@ export default class Map extends Component {
     render() {
         return (
         <div className='map'>
+            <div className='test'>测试样式覆盖问题</div>
+            {/* 顶部导航栏 */}
+            <NavHeader 
+                // onLeftClick={()=>{
+                //     // this.props.history.go(-1)
+                //     console.log('退退退');
+                // }}
+            >
+                地图找房
+            </NavHeader>
             {/* 地图容器 */}
             <div id='container'>
                 {/* <Map center={{lng: 116.402544, lat: 39.928216}} zoom="11">

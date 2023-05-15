@@ -282,3 +282,69 @@
         * 4. 设置List组件的scrollToAlignment配置项值为start，保证被点击行出现在页面顶部
         * 5. 对于点击索引无法正确定位的问题，调用List组件的measureAllRows方法，提前计算高度来解决。什么时候调用该方法？组件刚刚挂载的时候，也就是在componentDidMount钩子中调用
 * 4.8 切换城市
+    * 1. 给城市列表绑定单击事件
+    * 2. 判断当前城市是否有房源数据(只有北/上/广/深四个城市有数据)
+    * 3. 如果有房源数据，则保存当前城市数据到本地缓存中，并返回上一页
+    * 4. 如果没有房源数据，则提示用户；该城市暂无房源数据，不执行任何操作
+
+## 五、地图找房模块
+* 5.1 功能分析
+    * 业务：使用高德地图API实现司徒找房
+    * 功能：
+        * 1. 展示当前定位城市
+        * 2. 真实该城市所有区的房源数据
+        * 3. 展示某区下所有真的房源数据
+        * 4. 展示某镇下所有小区的房源数据
+        * 5. 展示某小区下的房源数据列表
+    * 难点：高德地图标注、缩放级别、缩放时间等的使用
+* 5.2 顶部导航栏
+    * 5.2.1 步骤
+        * 1. 封装NavHeader组件实现城市选择、地图找房页面的复用
+        * 2. 在components目录中创建NavHeader组件
+        * 3. 在该组件中封装antd-mobile组件库的NavBar组件
+        * 4. 在地图找房页面使用封装好的NavHeader组件实现顶部导航栏功能
+        * 5. 使用NavHeader组件，替换城市选择页面的NavBar组件
+        * **注：默认情况下，只有路由Route直接渲染的组件才能够获取到路由信息(比如：hostory.go()等)**
+            * 方法：如果需要在其他组件中获取到路由信息可以通过withRouter高阶函数来获取
+            * 1. 从react-router-dom中导入withRouter高阶组件
+            * 2. 使用withRouter高阶组件包装NavHeader组件
+                * 目的：包装后，就可以在组件中获取到当前路由信息了
+            * 3. 从props中解构出history对象
+            * 4. 调用hostory.go()实现返回上一页的功能
+            * 5. 从props中解构出onLeftClick函数，实现自定义 < 按钮的点击事件
+    * 5.2.2 添加props校验
+        * 1. 安装：npm i prop-types
+        * 2. 导入PropTypes
+        * 3. 给NavHeader组件的children(必选项，且必为字符串类型)和onLeftClick(可选项，类型必为函数类型)属性添加props校验
+* 5.3 组件间样式覆盖问题
+    * 5.3.1 概述
+        * 1. 问题：CityList组件的样式，会影响Map组件的样式
+        * 2. 原因：在配置路由时，CityList和Map组件都被导入到项目中，那么组件的样式也就被导入到项目中了。如果组件之间样式名称相同，那么一个组件中的样式就会在另一个组件中也生效，从而造成组件之间样式相互覆盖的问题。
+        * 3. 结论：默认，只要导入了组件，不管组件有没有显示在页面中，组件的样式就会生效
+        * 4. 解决方法：
+            * 手动处理(起不同的类名)
+            * CSS IN JS
+    * 5.3.2 CSS IN JS
+        * CSS IN JS：是使用JavaScript编写CSS的统称，用来解决CSS样式冲突、覆盖等问题
+        * CSS IN JS的具体实现有50多种， 比如：CSS Modules、styled-components等
+        * 推荐使用：CSS Modules(React脚手架已集成，可直接使用)
+    * 5.3.3 CSS Modules的说明
+        * CSS Modules通过对CSS类名重命名，保证每个类名的唯一性，从而避免样式冲突的问题
+        * 换句话说：所有类名具有“局部作用域”，只在当前组件内部生效
+        * 实现方式：webpack的css-loader插件(https://github.com/css-modules/css-modules)
+        * 命名采用：BEM(Block块、Element元素、Modifier三部分组成)命名规范，比如：.list_item_active
+        * 在React脚手架中演化成：文件名(filename)、类名(classname)、hash(随机)三部分，只需要指定**类名**即可，如：[filename]_[classname]_[hash]
+    * 5.3.4 CSS Modules在项目中的使用
+        * 1.创建名为[name].modules.css的样式文件(React脚手架中的约定，与不同CSS作区分)
+            * ```
+                //在CityList组件中创建的样式文件名称
+                index.module.css
+              ```
+        * 2. 组件中导入该样式文件(注意语法)
+            * ```
+                //在CityList组件中导入样式文件
+                import styles from './index.module.css'
+              ```
+        * 3. 通过styles对象访问对象中的样式名来设置样式
+            * ```<div className={styles.test}></div>```
+

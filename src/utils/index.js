@@ -19,7 +19,7 @@ export const getCurrentCity=()=>{
                     // 设置地图容器id
                     // viewMode: '3D', // 是否为3D地图模式
                     zoom: 5, // 初始化地图级别
-                    center: [116.404, 39.915], // 初始化地图中心点位置
+                    center: [121.29, 31.14], // 初始化地图中心点位置
                 });
                 console.log(map);
                 // 实例化城市查询类
