@@ -12,7 +12,7 @@ import NavHeader from '../../components/NavHeader'
 import './index.scss'
 // 导入CSS Modules的样式文件
 import styles from './index.module.css'
-console.log(styles);  //{test: 'CityList_test__H0d24'}
+// console.log(styles);  //{test: 'CityList_test__H0d24'}
 
 // 数据格式化的方法
 // list:[{},{}]
@@ -21,23 +21,33 @@ const formatCityData=list=>{
   // const cityIndex=[]
   // 1. 遍历list数组
   list.forEach(item=>{
-    // 2. 获取每一个城市的首字母
+    // 2. 获取每一个城市的首字母，item.short=>遍历的城市的简写；item.short.substr(0,1)=>获取遍历的城市简写后，调用这个对象的substr方法，并传入参数0和1，意思是从下标为0开始，截取长度为1的对象。最后讲解去下来的对象赋值给指定的变量
     const first=item.short.substr(0,1)
     // console.log(first);
     // 3. 判断cityList中是否有该分类
     if (cityList[first]) {
       // 4. 有则，直接往分类里push数据
-        // cityList[first]是啥意思？是[{},{},...,{}]
       cityList[first].push(item)
+      
+      /*
+      cityList[first]是啥意思？是
+      {
+        a:[{as},{...}],
+        b:[{bj},{bd},{...}],
+        c:[{cq},{...}],
+        ...
+      }
+      */ 
     }else{
       // 5. 没有则，先创建一个数组，再把当前城市信息添加到数组中
       cityList[first]=[item]
     }
   })
   
-  // 获取索引数据
+  // 获取索引数据，调用Object的keys方法，方法里传参cityList，使对象成为cityList对象，并调用sort方法，来对cityList对象里的城市的首字母进行排序，最后赋值给cityIndex
   const cityIndex=Object.keys(cityList).sort()
 
+  // 返回cityList和cityIndex
   return {
     cityList,
     cityIndex
@@ -127,6 +137,7 @@ export default class CityList extends Component {
     const citySearch=await getCurrentCity()
     // console.log(citySearch,cityList,cityIndex);
     // console.log(222);
+    // 将当前定位城市添加到cityList中
     cityList['#']=[citySearch]
     cityIndex.unshift('#')
     console.log(citySearch,cityList,cityIndex);
@@ -140,6 +151,7 @@ export default class CityList extends Component {
 
   // 点击跳转到home并显示点击的城市
   changeCity({label,value}){
+    // 判断点击的城市是否是HOUSE_CITY里的城市，是则HOUSE_CITY数组里最小的索引是从0开始的，大于-1，进入判断；否则提示用户该城市没有房源信息
     if (HOUSE_CITY.indexOf(label)>-1) {
       // 有房源信息，则保存当前城市数据到本地缓存中，并返回上一页
       localStorage.setItem(`hkzf_city`,JSON.stringify({label,value}))
@@ -160,6 +172,7 @@ export default class CityList extends Component {
   }) => {
     // 获取每一行的字母索引
     const {cityIndex,cityList}=this.state
+    // 从cityIndex中摘取索引号index，并赋值给letter
     const letter=cityIndex[index]
     // console.log(letter);
     // 获取指定字母索引下的城市列表
@@ -168,6 +181,7 @@ export default class CityList extends Component {
     return (
       // 修改rowRenderer方法中渲染的每行的结构和样式
       <div key={key} style={style} className="city">
+        {/* 给formatCityIndex函数传参letter */}
         <div className="title">{formatCityIndex(letter)}</div>
         {
           cityList[letter].map(item=>(
@@ -197,6 +211,7 @@ export default class CityList extends Component {
     return cityIndex.map((item,index)=>
       <li className="city-index-item" key={item} onClick={()=>{
         // console.log('当前索引号：',index);
+        // 给函数绑定单击事件，点击某个字母之后，就直接跳到以点击的字母开头的城市的部分
         this.cityListComponent.current.scrollToRow(index)
       }}>
         <span className={activeIndex===index ? "index-active" : ''}>
@@ -220,7 +235,7 @@ export default class CityList extends Component {
     return (
       <div className="citylist">
         {/* 顶部导航栏 */}
-        <NavHeader>
+        <NavHeader className={styles.navBar}>
           城市选择
         </NavHeader>
 
@@ -249,7 +264,7 @@ export default class CityList extends Component {
         </ul>
 
         {/* <div className="test">测试样式覆盖问题</div> */}
-        <div className={styles.test}>测试样式覆盖问题</div>
+        {/* <div className={styles.test}>测试样式覆盖问题</div> */}
 
       </div>
     )

@@ -335,7 +335,7 @@
         * 命名采用：BEM(Block块、Element元素、Modifier三部分组成)命名规范，比如：.list_item_active
         * 在React脚手架中演化成：文件名(filename)、类名(classname)、hash(随机)三部分，只需要指定**类名**即可，如：[filename]_[classname]_[hash]
     * 5.3.4 CSS Modules在项目中的使用
-        * 1.创建名为[name].modules.css的样式文件(React脚手架中的约定，与不同CSS作区分)
+        * 1. 创建名为[name].modules.css的样式文件(React脚手架中的约定，与不同CSS作区分)
             * ```
                 //在CityList组件中创建的样式文件名称
                 index.module.css
@@ -347,4 +347,61 @@
               ```
         * 3. 通过styles对象访问对象中的样式名来设置样式
             * ```<div className={styles.test}></div>```
-
+    * 5.3.5 使用CSS Modules修改NavHeader组件的样式
+        * 1. 在NavHeader目录中创建名为index.module.css的样式文件
+        * 2. 在样式文件中修改当前组建的样式(使用单个类名设置样式，不使用嵌套样式)
+        * 3. 对于组件库中已经有的全局样式(比如：.am-navbar-title)需要使用:global()来指定
+            * ```:global(.am-navbar-title){color:#333}```/```.root :global(.am-navbar-title){}s```
+* 5.4 根据定位展示当前城市
+    * 1. 获取当前定位城市
+    * 2. 使用地址解析器解析当前城市坐标
+    * 3. 调用setZoom()方法在地图中展示当前城市，并设置缩放级别为11
+    * 4. 在地图中添加比例尺和平移缩放控件
+* 5.5 创建文本覆盖物
+    * 5.5.1 步骤
+        * 1. 打开高德地图地图JS API 参考手册 覆盖物
+        * 2. 创建labelMarker实例对象
+        * 3. 创建icon实例对象，在labelMarker中设施属性icon为创建的实例对象icon，并调用setIcon()方法设置样式
+        * 4. 在map对象上调用add(labelMarker)方法，将文本覆盖物添加到地图中
+    * 5.5.2 绘制房源覆盖物
+        * 1. 调用marker的setLabel()方法，传入HTML结构，修改HTML内容的样式
+            * ```setLabel(html:String|htmlDOM)```,```this.marker.setLabel(`<div class="${style.bubble}">...内容</div>`)```
+        * 2. 调用setStyle()修改覆盖物的样式
+            * ```labelMarker.setIcon(labelStyle)```
+        * 3. 给文本覆盖物添加单击事件
+            * ```labelMarker.on('click',fn=>{})```
+* 5.6 地图找房
+    * 5.6.1 功能分析
+        * 1. 获取房源数据，用于渲染覆盖物
+        * 2. 单击覆盖物后：1. 放大地图；2. 获取数据，渲染下一级覆盖物(重复第一步)
+        * 3. 区、镇：单击事件中，清除现有的覆盖物，创建新的覆盖物
+        * 4. 小区：不清除覆盖物，移动地图，在房源列表中展示该小区下面所有的房屋数据
+    * 5.6.2 渲染所有区的房源覆盖物
+        * 1. 获取房源信息
+        * 2. 遍历数据，创建覆盖物，给每个覆盖物添加唯一标识(是为了在后面点击区覆盖物的时候，能够获取点击的那一项)
+        * 3. 给覆盖物添加单击事件
+        * 4. 在单击事件中，获取到当前单击项的唯一标识
+        * 5. 放大地图(级别为13)，调用clearMap()方法清除当前覆盖物
+    * 5.6.3 封装流程
+        * 1. renderOverlays()作为入口：(1)接收区域id参数，获取该区域下的房源数据；(2)获取覆盖物类型以及下级地图缩放级别
+        * 2. createOverlays()方法：根据传入的类型，调用对应方法，创建覆盖物
+        * 3. createCircle()方法：根据传入的数据创建覆盖物，绑定事件(放大地图、清除覆盖物、渲染下一级房源数据)
+        * 4. createRect()方法：根据传入的数据创建覆盖物，绑定事件(移动地图，渲染房源列表)
+    * 5.6.4 地图找房
+        * 1. 接收区域id参数，获取指定区域下房源数据
+        * 2. 调用getTypeAndZoom函数，这个函数需要我自己封装，在函数内调用getZoom方法，来获取地图缩放级别、覆盖物类别(根据缩放级别来得到)
+    * 5.6.5 createOverlays()
+        * 根据传入的类型等数据，调用相应的创建覆盖物，并提供参数
+    * 5.6.6 createCircle()
+        * 1. 复用之前创建覆盖物的代码逻辑
+        * 2. 在覆盖物的单击事件中，调用renderOverlays(id)方法，重新渲染该区域的房屋数据
+    * 5.6.7 createRect()
+        * 1. 创建Marker、设置样式、设置HTML内容，绑定单击事件
+        * 2. 单击事件中，获取该小区的房源数据
+        * 3. 展示房源列表
+        * 4. 渲染获取到的房源数据
+        * 5. 调用地图panBy()方法，移动地图到中间位置
+            * 公式：
+                * 垂直平移：(window.innerHeight-330)/2-target.clientY
+                * 水平平移：window.innerWidth/2-target.clientX
+        * 6. 监听地图movestart事件，在地图移动时隐藏房源列表

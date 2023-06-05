@@ -9,6 +9,7 @@ import Profile from '../Profile'
 import '../../assets/fonts/iconfont.css'
 import './index.css'
 
+// 设置常量配置信息
 const tabs=[
   {
     key:'index',
@@ -58,6 +59,7 @@ export default class Home extends Component{
           key={item.key}
           title={item.title}
           path={item.path}
+          // ${item.icon} --取值表达式
           icon={<i className={`iconfont ${item.icon}`} />}
           selectedIcon={<i className={`iconfont ${item.icon}`} />}
           selected={this.state.selectedTab === item.path}
@@ -83,7 +85,7 @@ export default class Home extends Component{
         </Switch>
         <TabBar>
             {this.renderTabBarItem()}
-          </TabBar>
+        </TabBar>
       </div>
     )
   }

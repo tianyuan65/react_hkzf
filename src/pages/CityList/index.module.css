@@ -1,0 +1,17 @@
+/* .test{
+    color:aqua;
+    font-size: 20px;
+} */
+
+.navBar{
+    margin-top: -45px;
+    background-color: #f6f5f6;
+    color:#333;
+    display: flex;
+}
+:global(.am-navbar-title){
+    color:#333;
+    display: flex;
+    font-size: 30px;
+    text-align: center;
+}

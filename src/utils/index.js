@@ -1,4 +1,5 @@
 import axios from "axios"
+// 引入amap-jsapi-loader
 import AMapLoader from '@amap/amap-jsapi-loader';
 
 // 1. 在utils目录中，新建index.js，在该文件中封装辅助性的工具函数

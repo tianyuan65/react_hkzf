@@ -72,7 +72,7 @@ export default class Index extends Component {
 
   // 获取租房小组数据的方法
   async getGroups(){
-    const res=await axios.get('http://localhost:8080/home/groups',{
+    const res=await axios.get('http://localhost:8080/home/group',{
       params:{
         // 暂时用服务器提供的，后续城市位置变化时再把对应城市的地址当做URL参数传递进去即可
         area:'AREA%7C88cff55c-aaa4-e2e0'
@@ -127,11 +127,11 @@ export default class Index extends Component {
       // .catch(e => {
       //     console.log(e);
       // });
-      const citySearch=await getCurrentCity()
-      console.log(citySearch);
-      this.setState({
-        citySearchName:citySearch.label
-      })
+    const citySearch=await getCurrentCity()
+    console.log(citySearch);
+    this.setState({
+      citySearchName:citySearch.label
+    })
   }
   //渲染轮播图结构   
   renderSwipers(){
@@ -191,7 +191,7 @@ export default class Index extends Component {
                     autoplayInterval={5000}  // 自动切换的时间间隔
                     >
                     {this.renderSwipers()}
-                </Carousel>):('')  //若没有加载完成，就渲染空的内容
+                </Carousel>):(' ')  //若没有加载完成，就渲染空的内容
             }
 
             {/* 搜索框 */}
@@ -237,10 +237,10 @@ export default class Index extends Component {
             }}/>
 
             {/* 最新资讯 */}
-            <div className='news'>
-              <h3 className='group-title'>最新资讯</h3>
-              <WingBlank size="md">{this.renderNews()}</WingBlank>
-            </div>
+          <div className='news'>
+            <h3 className='group-title'>最新资讯</h3>
+            <WingBlank size="md">{this.renderNews()}</WingBlank>
+          </div>
         </div>
         
       </div>

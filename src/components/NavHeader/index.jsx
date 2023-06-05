@@ -5,6 +5,7 @@ import {withRouter} from 'react-router-dom'
 // 导入props校验的包
 import PropTypes from 'prop-types'
 import './index.scss'
+import styles from './index.module.css'
 
 // 从props中解构出history对象
 function NavHeader({children,history,onLeftClick}) {
@@ -14,7 +15,7 @@ function NavHeader({children,history,onLeftClick}) {
         <div>
             {/* 顶部导航栏 */}
             <NavBar
-                className="navbar"
+                className={styles.navBar}
                 mode="light"
                 icon={<i className="iconfont icon-back" />}
                 // 调用hostory.go()实现返回上一页的功能

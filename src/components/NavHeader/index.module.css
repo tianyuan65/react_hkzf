@@ -1,0 +1,12 @@
+.navBar{
+    color:#333;
+    display: flex;
+}
+
+/* 全局类型 */
+.navBar :global(.am-navbar-title){
+    color:#333;
+    display: flex;
+    font-size: 30px;
+    text-align: center;
+}
