@@ -140,18 +140,17 @@ export default class Map extends Component {
         })
     }
 
-
     // 渲染覆盖物入口，传入id，可以在函数里获取房源数据的时候，根据指定的id获取
     // id=value
     async renderOverlays(id){
-        console.log('id')
+        // console.log('id')
         console.log(`${id}`)
         // 开启loading
         Toast.loading('数据加载中...',0,null,false)
         // console.log(this);
         // 根据当前指定的id，获取房源数据
         const res=await axios.get(`http://localhost:8080/area/map?id=${id}`)
-        console.log('renderOverlays',res);
+        // console.log('renderOverlays',res);
         console.log('zoom renderoverlays'+this.map.getZoom());
         // 关闭loading
         Toast.hide()
